@@ -1,0 +1,5 @@
+{
+  "name": "VetAI Assistant",
+  "description": "Inteligência Artificial avançada para auxílio em consultas veterinárias, diagnósticos baseados em literatura renomada, cálculos de dosagem por peso e gestão de prontuários.",
+  "requestFramePermissions": ["microphone"]
+}

@@ -1,0 +1,32 @@
+rules_version = '2';
+// Version: 1.2 - Simplified for stability
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(data) {
+      return isAuthenticated() && data.createdBy == request.auth.uid;
+    }
+
+    match /patients/{patientId} {
+      allow read: if isAuthenticated() && (resource == null || isOwner(resource.data));
+      allow create: if isAuthenticated() && request.resource.data.createdBy == request.auth.uid;
+      allow update: if isAuthenticated() && isOwner(resource.data) && request.resource.data.createdBy == request.auth.uid;
+      allow delete: if isAuthenticated() && isOwner(resource.data);
+    }
+
+    match /consultations/{consultationId} {
+      allow read: if isAuthenticated() && (resource == null || isOwner(resource.data));
+      allow create: if isAuthenticated() && request.resource.data.createdBy == request.auth.uid;
+      allow update: if isAuthenticated() && isOwner(resource.data) && request.resource.data.createdBy == request.auth.uid;
+      allow delete: if isAuthenticated() && isOwner(resource.data);
+    }
+
+    match /test/connection {
+      allow read: if true;
+    }
+  }
+}

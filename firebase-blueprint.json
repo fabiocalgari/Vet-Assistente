@@ -1,0 +1,78 @@
+{
+  "entities": {
+    "Patient": {
+      "title": "Patient",
+      "description": "A veterinary patient (dog or cat).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "species": { "type": "string", "enum": ["dog", "cat"] },
+        "breed": { "type": "string" },
+        "weight": { "type": "number" },
+        "ownerName": { "type": "string" },
+        "ownerPhone": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "createdBy": { "type": "string" }
+      },
+      "required": ["name", "species", "weight", "createdBy"]
+    },
+    "Consultation": {
+      "title": "Consultation",
+      "description": "A veterinary consultation record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "patientId": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "symptoms": { "type": "string" },
+        "diagnosis": { "type": "string" },
+        "treatment": { "type": "string" },
+        "examUrls": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" },
+        "createdBy": { "type": "string" }
+      },
+      "required": ["patientId", "date", "createdBy"]
+    },
+    "Prescription": {
+      "title": "Prescription",
+      "description": "A generated prescription for a patient.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "patientId": { "type": "string" },
+        "consultationId": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "medications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "dosage": { "type": "string" },
+              "frequency": { "type": "string" },
+              "duration": { "type": "string" }
+            }
+          }
+        },
+        "createdBy": { "type": "string" }
+      },
+      "required": ["patientId", "date", "createdBy"]
+    }
+  },
+  "firestore": {
+    "/patients/{patientId}": {
+      "schema": "Patient",
+      "description": "Collection of veterinary patients."
+    },
+    "/consultations/{consultationId}": {
+      "schema": "Consultation",
+      "description": "Collection of consultation records."
+    },
+    "/prescriptions/{prescriptionId}": {
+      "schema": "Prescription",
+      "description": "Collection of prescriptions."
+    }
+  }
+}
